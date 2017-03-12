@@ -1,0 +1,40 @@
+<!-- Author: Song -->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CRUD Example--Edit</title>
+    <script src="/js/bootstrapCssWrapper-bundle.js"></script>
+</head>
+<body>
+<div id="root">
+</div>
+<div id="example">
+</div>
+<script type="text/javascript">
+    var form_title = "发票列表";
+    var pageParas = {
+        pageType:"invoiceList",
+        url:"/rest/invoice/list",
+        editUrl:"/dq/task/",
+        // orderBy:"shopName",
+        columnFilter : [
+            {name:'number', alias:'票据编号'},
+            {name:'history', alias:'流转历史'},
+            //{name:'buyerId', alias:'公司名称'},
+            {name:'sellerId', alias:'医院'},
+            {name:'date', alias:"开票时间"},
+            {name:'status', alias:'状态'},
+            // {name:'source', alias:'来源科室'},
+            // {name:'state', alias:'任务状态'},
+            // {name:'createUserName', alias:'创建人'},
+        ],
+        searchBar: true,
+        identifier : "number",
+        selector :{"name":"state", "value":[{"value":"all", "name":"全部类型"}, {"value":"流转中", "name":"流转中"}, {"value":"报销中", "name":"报销中"}, {"value":"报销完成", "name":"报销完成"}]
+        }
+    };
+</script>
+<script src="/js/commonV3.js"></script>
+<script src="/js/invoiceListGenerator-bundle.js"></script>
+</body>
+</html>

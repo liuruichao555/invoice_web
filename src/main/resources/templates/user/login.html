@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>用户登录</title>
+    <!-- Author: Song -->
+    <script src="/js/bootstrapCssWrapper-bundle.js"></script>
+</head>
+<body>
+<div id="root">
+</div>
+<div id="example">
+</div>
+<script type="text/javascript">
+    var pageParas ={
+        formInit :[
+            {name:"name"} ,
+            {name:"pwd"}
+        ],
+        formExtend :[
+            {name:"name", alias:"用户名"} ,
+            {name:"pwd", alias:"密码", type:"password"}
+        ],
+        title : "用户登录",
+        url : "/rest/user/login",
+        redirectUrl : "/",
+        method : "post"
+    }
+</script>
+<script src="/js/commonV3.js"></script>
+<script src="/js/standardRespFormGenerator-bundle.js"></script>
+</body>
+</html>

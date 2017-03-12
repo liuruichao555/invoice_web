@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>报销申请</title>
+    <!-- Author: Song -->
+    <script src="/js/bootstrapCssWrapper-bundle.js"></script>
+</head>
+<body>
+<div id="root">
+</div>
+<div id="example">
+</div>
+<script type="text/javascript">
+    var form_title = "我的报销";
+    var pageNo = window.location.hash;
+    if(pageNo){
+        pageNo = pageNo.substring(1);
+    }
+    var pageParas = {
+        url:"/rest/reimburse/mine/list",
+        editUrl:"/reimburse/view",
+        activePage :pageNo,
+        columnFilter : [
+            {name:"id", alias:"报销编号" } ,
+            {name:"companyTitle", alias:"单位名称" } ,
+            {name:"department", alias:"部门"  } ,
+            {name:"name", alias:"姓名"  } ,
+            {name:"state", alias:"状态"  } ,
+//            {name:"invoiceNumberList", alias:"发票列表"  }
+                        ],
+        searchBar: true,
+        type:"individual",
+        identifier : "id",
+        selector :{"name":"state", "value":[{"value":"all", "name":"全部类型"}, {"value":"待处理", "name":"待处理"}, {"value":"已完成", "name":"已完成"}]
+        }
+    };
+
+</script>
+<script src="/js/commonV3.js"></script>
+<script src="/js/invoiceListGenerator-bundle.js"></script>
+</body>
+</html>

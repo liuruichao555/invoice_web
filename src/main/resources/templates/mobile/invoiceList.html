@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" id="viewport" />
+    <title>报销列表</title>
+    <!--<link rel="stylesheet" href="../css/style2.css">-->
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        body{
+            background: #dddddd;
+
+        }
+        nav{
+            width:100%;
+            height: 70px;
+            background: #1d1d1d;
+            /*margin-bottom:10%;*/
+        }
+
+        option{
+            height:35px;
+            padding-top:5%;
+            text-align: center;
+            font-family: "Microsoft YaHei UI";
+            font-weight: 200;
+        }
+        .top{
+            text-align: center;
+            background: #ffffff;
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+        .top i{
+            display: inline-block;
+            background: url("/images/more.png") center;
+            width: 10px;
+            height: 11px;
+
+            margin:0 auto;
+        }
+        .add{
+            margin:15px;
+            font-family: "Microsoft YaHei UI";
+            font-size: 13px;
+            font-weight: 300;
+            color: #ec6912;
+        }
+        .list ul{
+            padding: 10px 0;
+            background: #ffffff;
+            margin: 5px 0;
+            padding-bottom: 50px;
+        }
+        .list p{
+            margin:5px;
+            font-family: "Microsoft YaHei UI";
+            font-size: 12px;
+            font-weight: 300;
+            color: #ec6912;
+        }
+        .list ul li{
+            width:100%;
+            padding: 5px 0;
+            height: 80px;
+            border-bottom: 1px solid #EC6913;
+        }
+        .list ul li time{
+            width:15%;
+            display: inline-block;
+            margin:10px;
+            font-family: "Microsoft YaHei UI";
+            font-size: 13px;
+            font-weight: 300;
+            text-align: center;
+            border-right: 1px solid #dddddd;
+            padding-right: 5px;
+            height: 40px;
+            line-height: 40px;
+        }
+        .list ul li .right{
+            width: 59%;
+            display: inline-block;
+            height: 80px;
+            float: right;
+            padding-top: 6px;
+        }
+        .conLeft{
+            width:50%;
+            display: inline-block;
+        }
+        .conRight{
+            display: inline-block;
+            width:45%;
+            text-align: right;
+            padding: 5% 0;
+
+        }
+        .conLeft h5{
+            font-size: 18px;
+            color: #ec6912;
+            font-weight:normal;
+        }
+        .conLeft p{
+            color: #5d5d5d;
+        }
+        .conRight span{
+            font-family: "Microsoft YaHei UI";
+            font-size: 12px;
+            color: #ec6912;
+        }
+        .conRight i{
+            display: inline-block;
+            background: url("/images/next.png") center;
+            height: 10px;
+            width: 11px;
+        }
+        .btn{
+            display: block ;
+            width:95% ;
+            height: 50px ;
+            background: #ec6912;
+            border-radius: 5px;
+            border:none;
+            margin:0 auto;
+            margin-top: 5%;
+            font-family: "Microsoft YaHei UI";
+            font-size: 18px;
+            font-weight:200;
+            color: #ffffff;
+        }
+
+        select {
+            float: right;
+            width:100%;
+            height: 40px;
+            display: inline-block;
+            text-align: right;
+            font-size: 15px;
+            border: none;
+            font-family: "Microsoft YaHei UI";
+            font-weight: 200;
+            border:none;
+            appearance:none;
+            -moz-appearance:none;
+            -webkit-appearance:none;
+            background: url("/images/arrow.png") no-repeat scroll right center transparent;
+            padding-right: 14px;
+        }
+        select::-ms-expand { display: none; }
+        .search-bar{
+            width: 60%;
+            height: 35px;
+            display: inline-block;
+            border: none;
+            font-size: 13px;
+            font-family: "Microsoft YaHei UI";
+            font-weight: 200;
+            padding:0 5px;
+            position: absolute;
+            left: 5px;
+        }
+        .searchModel{
+            float: left;
+            display: inline-block;
+            width:60%;
+            height: 35px;
+            border: 1px solid #9d9d9d;
+            border-radius: 5px;
+            position: relative;
+        }
+        .searchModel a{
+            display: inline-block;
+            width: 50px;
+            height: 35px;
+            font-size: 14px;
+            font-family: "Microsoft YaHei UI";
+            font-weight: 200;
+            color: #ffffff;
+            line-height: 35px;
+            /*border:1px solid #ec6912;;*/
+            border-radius:0px 5px 5px 0px;
+            background: #ec6912;
+            position: absolute;
+            right:0;
+        }
+        .clearfix{
+            clear: both;
+        }
+
+    </style>
+
+</head>
+<body>
+<#include "/mobile/common.html"/>
+<div class="top">
+    <!--<div class="searchModel"><input type="search" class="search-bar"/><a>搜索</a></div>-->
+    <select id="state">
+        <option value="all">全部类型</option>
+        <option value="流转中">流转中</option>
+        <option value="报销中">报销中</option>
+        <option value="报销完成">报销完成</option>
+    </select>
+    <div class="clearfix"></div>
+</div>
+<!--<a class="add">添加发票</a>-->
+<div class="list">
+    <!--<p>本月</p>-->
+    <ul id="dataList">
+    </ul>
+</div>
+<input type="button" class="btn" value="报销" id="subBtn"/>
+<script src="/js/zepto.min.js"></script>
+<script src="/js/touch.js"></script>
+<script>
+    $(function() {
+
+        $('#subBtn').tap(function() {
+            var ticketArr = [];
+            var buyerIdArr = [];
+            var ticketIDs = $("input[name='ticketIDs']:checked").each(function() {
+                ticketArr.push($(this).attr('ticketID'));
+                buyerIdArr.push($(this).attr('companyTitle'));
+            });
+
+            if (ticketArr.length <= 0) {
+                alert('报销列表为空！');
+                return;
+            }
+
+            var tBuyerId = buyerIdArr[0];
+            for (var i = 1; i < buyerIdArr.length; i++) {
+                if (buyerIdArr[i] != tBuyerId) {
+                    alert('请选择相同的单位报销！');
+                    return;
+                }
+            }
+            location.href = '/mobile/reimburse/add?buyerId=' + tBuyerId + '&list=' + ticketArr.join('-');
+        });
+
+        $('#state').change(function() {
+            $('#dataList').html('');
+            var state = $(this).val();
+            render(state);
+        });
+
+        //var state = $('#state').val();
+        var list = null;
+        var tmpl = '<li>' +
+            '<time>{department}</time><div class="right">' +
+            '<div class="conLeft"> ' +
+            '<h5>{name}</h5> ' +
+            '<p>编号：{id}</p> <p>时间：{time}</p><p>来源：{sellerId}</p>' +
+            '</div> ' +
+            '<div class="conRight"> <span>{state}</span>' +
+            '<input type="checkbox" name="ticketIDs" companyTitle="{companyTitle}" ticketID="{ticketID}"/> </div> </div> </li>';
+        var loadData = function() {
+            $.ajax({
+                type: 'get',
+                url: '/rest/invoice/list',
+                success: function(data) {
+                    if (data.status == 1) {
+                        list = data.data;
+                        if (list) {
+                            render('all');
+                        }
+                    } else {
+                        alert('操作失败：' + data.message);
+                    }
+                }
+            });
+        };
+
+        var render = function(sstate) {
+            var html = '';
+            console.log(sstate)
+            $.each(list, function(index, item) {
+                var state = item.status;
+                var tmpl2 = tmpl;
+                if (sstate == 'all' || state == sstate) {
+                    if (state == '报销中' || state == '报销完成') {
+                        tmpl2 = tmpl2.replace('<input type="checkbox" name="ticketIDs" companyTitle="{companyTitle}" ticketID="{ticketID}"/>', '');
+                    }
+                    html = html + tmpl2.replace('{department}', item.buyerId)
+                            .replace('{name}', '')
+                            .replace('{id}', item.number)
+                            .replace('{time}', item.date)
+                            .replace('{sellerId}', item.sellerId)
+                            .replace('{ticketID}', item.number)
+                            .replace('{companyTitle}', item.buyerId)
+                            .replace('{state}', item.status);
+                }
+            });
+            $('#dataList').html(html);
+        }
+
+        loadData();
+    });
+</script>
+</body>
+</html>

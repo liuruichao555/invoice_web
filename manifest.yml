@@ -1,0 +1,6 @@
+applications:
+   - name: ox-invoice-web
+     random-route: true
+     path: target/invoice_web-1.0.war
+     memory: 1024M
+     instances: 1

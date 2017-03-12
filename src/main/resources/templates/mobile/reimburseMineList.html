@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" id="viewport" />
+    <title>个人报销列表</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        body{
+            background: #dddddd;
+
+        }
+        nav{
+            width:100%;
+            height: 70px;
+            background: #1d1d1d;
+            /*margin-bottom:10%;*/
+        }
+
+        option{
+            height:35px;
+            padding-top:5%;
+            text-align: center;
+            font-family: "Microsoft YaHei UI";
+            font-weight: 200;
+        }
+        .top{
+            text-align: center;
+            background: #ffffff;
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+        .top i{
+            display: inline-block;
+            background: url("/images/more.png") center;
+            width: 10px;
+            height: 11px;
+
+            margin:0 auto;
+        }
+        .add{
+            margin:15px;
+            font-family: "Microsoft YaHei UI";
+            font-size: 13px;
+            font-weight: 300;
+            color: #ec6912;
+        }
+        .list ul{
+            padding: 10px 0;
+            background: #ffffff;
+            margin: 5px 0;
+
+        }
+        .list p{
+            margin:5px;
+            font-family: "Microsoft YaHei UI";
+            font-size: 12px;
+            font-weight: 300;
+            color: #ec6912;
+        }
+        .list ul li{
+            width:100%;
+            padding: 5px 0;
+            height: 80px;
+            border-bottom: 1px solid #EC6913;
+        }
+        .list ul li time{
+            width:15%;
+            display: inline-block;
+            margin:10px;
+            font-family: "Microsoft YaHei UI";
+            font-size: 13px;
+            font-weight: 300;
+            text-align: center;
+            border-right: 1px solid #dddddd;
+            padding-right: 5px;
+            height: 40px;
+            line-height: 40px;
+        }
+        .list ul li .right{
+            width: 58%;
+            display: inline-block;
+            height: 80px;
+            float: right;
+            padding-top: 6px;
+        }
+        .conLeft{
+            width:50%;
+            display: inline-block;
+        }
+        .conRight{
+            display: inline-block;
+            width:45%;
+            text-align: right;
+            padding: 5% 0;
+
+        }
+        .conLeft h5{
+            font-size: 18px;
+            color: #ec6912;
+            font-weight:normal;
+        }
+        .conLeft p{
+            color: #5d5d5d;
+        }
+        .conRight span{
+            font-family: "Microsoft YaHei UI";
+            font-size: 12px;
+            color: #ec6912;
+        }
+        .conRight i{
+            display: inline-block;
+            background: url("/images/next.png") center;
+            height: 10px;
+            width: 11px;
+        }
+        .btn{
+            display: block ;
+            width:95% ;
+            height: 50px ;
+            background: #ec6912;
+            border-radius: 5px;
+            border:none;
+            margin:0 auto;
+            margin-top: 5%;
+            font-family: "Microsoft YaHei UI";
+            font-size: 18px;
+            font-weight:200;
+            color: #ffffff;
+        }
+
+        select {
+            float: right;
+            width:30%;
+            height: 40px;
+            display: inline-block;
+            text-align: right;
+            font-size: 15px;
+            border: none;
+            font-family: "Microsoft YaHei UI";
+            font-weight: 200;
+            border:none;
+            appearance:none;
+            -moz-appearance:none;
+            -webkit-appearance:none;
+            background: url("/images/arrow.png") no-repeat scroll right center transparent;
+            padding-right: 14px;
+        }
+        select::-ms-expand { display: none; }
+        .search-bar{
+            width: 60%;
+            height: 35px;
+            display: inline-block;
+            border: none;
+            font-size: 13px;
+            font-family: "Microsoft YaHei UI";
+            font-weight: 200;
+            padding:0 5px;
+            position: absolute;
+            left: 5px;
+        }
+        .searchModel{
+            float: left;
+            display: inline-block;
+            width:60%;
+            height: 35px;
+            border: 1px solid #9d9d9d;
+            border-radius: 5px;
+            position: relative;
+        }
+        .searchModel a{
+            display: inline-block;
+            width: 50px;
+            height: 35px;
+            font-size: 14px;
+            font-family: "Microsoft YaHei UI";
+            font-weight: 200;
+            color: #ffffff;
+            line-height: 35px;
+            /*border:1px solid #ec6912;;*/
+            border-radius:0px 5px 5px 0px;
+            background: #ec6912;
+            position: absolute;
+            right:0;
+        }
+        .clearfix{
+            clear: both;
+        }
+
+    </style>
+
+</head>
+<body>
+<#include "/mobile/common.html"/>
+<div class="top">
+    <div class="searchModel"><input type="search" class="search-bar" id="q"><a id="searchBtn" href="javascript:;">搜索</a></div>
+    <select id="state">
+        <option value="all">全部类型</option>
+        <option value="待处理">待处理</option>
+        <option value="已完成">已完成</option>
+    </select>
+    <div class="clearfix"></div>
+</div>
+<div class="list">
+    <ul id="dataList">
+
+    </ul>
+    <div id="tip" style="width: 100%;text-align: center;">没有更多了</div>
+</div>
+<script src="/js/zepto.min.js"></script>
+<script src="/js/touch.js"></script>
+<script src="/js/scroll.js"></script>
+<script src="/js/util.js"></script>
+<script>
+    $(function() {
+        var requestParams = getRequest();
+        var initQ = requestParams.q;
+        if (initQ) {
+            $('#q').val(decodeURI(initQ));
+        }
+        var initState = requestParams.state;
+        if (initState) {
+            $('#state').val(decodeURI(initState));
+        }
+
+        $('#tip').hide();
+
+        $('#searchBtn').tap(function() {
+            cleanPageInfo();
+            loadData();
+        });
+
+        $('#state').change(function() {
+            cleanPageInfo();
+            loadData();
+        })
+
+        var tmpl = '<li>' +
+            '<span>{companyTitle}</span><span>{department}</span><div class="right">' +
+            '<div class="conLeft"> ' +
+            '<h5>{name}</h5> ' +
+            '<p>编号：{id}</p>' +
+            '</div> ' +
+            '<div class="conRight"><span>{state}</span>' +
+            '<a href="javascript:;" class="processA" data-id="{id}">{processText}</a></div> </div> </li>';
+        $('#dataList').on('tap', '.processA', function() {
+            var item = $(this);
+            var id = item.attr('data-id');
+            console.log(id);
+            location.href = '/mobile/reimburse/edit/' + id + '?pn=1';
+        })
+        var totalPage = 1;
+        var currentPage = 1;
+        var loadData = function() {
+            var q = $('#q').val();
+            var state = $('#state').val();
+            var url = '/rest/reimburse/mine/list/' + currentPage + '?state=' + state;
+            if (q && q.length > 0) {
+                url = url + '&q=' + q;
+            }
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data) {
+                    totalPage = data.totalPage;
+                    currentPage = data.currentPage + 1;
+                    var list = data.data;
+                    var html = '';
+                    for (var i = 0; i < list.length; i++) {
+                        var tmpl2 = tmpl;
+                        var item = list[i];
+                        var state = item.state;
+                        if (state == '已完成') {
+                            tmpl2 = tmpl2.replace('{processText}', '查看');
+                        } else {
+                            tmpl2 = tmpl2.replace('{processText}', '处理');
+                            tmpl2 = tmpl2.replace('<span>{state}</span>', '');
+                        }
+                        tmpl2 = tmpl2.replace('{department}', item.department)
+                            .replace('{name}', item.name)
+                            .replace(/{id}/g, item.id)
+                            .replace('{time}', item.date)
+                            .replace('{companyTitle}', item.companyTitle)
+                            .replace('{state}', state);
+                        html = html + tmpl2;
+                    }
+                    $('#dataList').append(html);
+                    try {
+
+                        history.pushState({}, document.title, '/mobile/reimburse/mine/list' + url.substr(url.indexOf('?')));
+                    } catch(e) {}
+                },
+                error: function() {
+                    alert('操作失败！');
+                }
+            })
+        }
+
+        function cleanPageInfo() {
+            totalPage = 1;
+            currentPage = 1;
+            $('#dataList').html('');
+        }
+
+        function scrollLoad(){
+            //可视窗口的高度
+            var scrollTop = 0;
+            var scrollBottom = 0;
+            $(document).scroll(function(){
+                var dch = getClientHeight();
+                scrollTop = getScrollTop();
+                scrollBottom = document.body.scrollHeight - scrollTop;
+                if(scrollBottom >= dch && scrollBottom <= (dch+10)){
+                    if(totalPage < (currentPage + 1)){
+                        $('#tip').show();
+                        return;
+                    }
+                    ++currentPage;
+                    loadData();
+                }
+            });
+        }
+
+        loadData();
+        scrollLoad();
+    });
+</script>
+</body>
+</html>

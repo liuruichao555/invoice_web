@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" id="viewport" />
+    <title>自助发票生成</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        body{
+            background: #dddddd;
+            overflow-x: hidden;
+        }
+        nav{
+            width:100%;
+            height: 70px;
+            background: #1d1d1d;
+            margin-bottom:10%;
+        }
+        .invoiceProduce{
+            width:95%;
+            display: block;
+            margin: 20px auto;
+            height: 100px;
+            border-radius: 5px;
+            background: #ffffff;
+            font-size: 20px;
+            font-family: "Microsoft YaHei UI";
+            color: #ffffff;
+            font-weight: 300;
+            text-align: center;
+            line-height: 70px;
+            padding:1%;
+        }
+        .invoiceProduce h6,.people div h6{
+            width:30%;
+            display: inline-block;
+            color: #5d5d5d;
+            text-align: left;
+            font-family: "Microsoft YaHei UI";
+            font-size: 14px;
+            font-weight: 200;
+        }
+        .invoiceProduce .input-text{
+            width:50%;
+            display: inline-block;
+            height: 35px;
+            border-radius: 5px;
+            border:none;
+            transition: 0.2s all ease-in;
+            font-family: "Microsoft YaHei UI";
+        }
+        .invoiceProduce em{
+            display: block;
+            width: 100%;
+            border-bottom: 1px solid #dddddd;
+        }
+        .invoiceProduce .input-text:focus{
+            box-shadow: 0 0 5px 0px #ec6912;
+        }
+        .invoiceProduce p{
+            color: #5d5d5d;
+            display: block;
+            font-size: 14px;
+            text-align:left;
+            margin-left: 1%;
+        }
+        .invoiceProduce p span{
+            float: right;
+            margin-right: 1%;
+        }
+        .btn{
+            display: block ;
+            width:95% ;
+            height: 50px ;
+            background: #ec6912;
+            border-radius: 5px;
+            border:none;
+            margin:0 auto;
+            margin-top: 5%;
+            font-family: "Microsoft YaHei UI";
+            font-size: 18px;
+            font-weight:200;
+            color: #ffffff;
+        }
+        .people{
+            width:100%;
+        }
+        .people p{
+            color: #5d5d5d;
+            font-family: "Microsoft YaHei UI";
+            font-weight:200;
+            font-size: 14px;
+            margin-left:1%;
+            margin-bottom: 1%;
+        }
+        .people div{
+            background: #ffffff;
+            width:100%;
+            height: 50px;
+            border-top: 1px solid #dddddd;
+            border-bottom: 1px solid #dddddd;
+            line-height: 50px;
+            padding:1%;
+        }
+        .people div .input-text{
+            width:50%;
+            display: inline-block;
+            height: 35px;
+            border:none;
+        }
+        h5{
+            display: inline-block;
+            color: #ec6912;
+            font-size: 30px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <#include "/mobile/common.html"/>
+    <div class="invoiceProduce">
+        <div>
+            <h6>单位全称</h6>
+            <input type="text" id="title" value="oxchains" class="input-text" style="font-size: 16px"/>
+            <em></em>
+        </div>
+        <!--<div>
+            <p>物品名称<span>￥100</span></p>
+            <em></em>
+        </div>
+        <div >
+            <p >合计：</p>
+            <h5>￥100</h5>
+        </div>-->
+    </div>
+    <div class="people">
+        <p>收票人信息</p>
+        <div style="border-bottom: none">
+            <h6>持票人手机</h6>
+            <input type="text" class="input-text" id="mobile"/>
+            <em></em>
+        </div>
+        <div>
+            <h6>购物小票号码</h6>
+            <input type="text" class="input-text" id="ticketID"/>
+            <em></em>
+        </div>
+
+    </div>
+    <input type="button" class="btn" value="开具发票" id="subBtn"/>
+    <script src="/js/zepto.min.js"></script>
+    <script src="/js/touch.js"></script>
+    <script>
+        $(function() {
+            $('#subBtn').tap(function() {
+                var title = $('#title').val();
+                var ticketID = $('#ticketID').val();
+                var mobile = $('#mobile').val();
+                if (title == '') {
+                    alert('请填写公司全称！');
+                    return;
+                }
+                if (ticketID == '') {
+                    alert('请填写小票号码！');
+                    return;
+                }
+                if (mobile == '') {
+                    alert('请填写手机号码！');
+                    return;
+                }
+                $.ajax({
+                    url: '/rest/invoice/auto',
+                    type: 'POST',
+                    data: JSON.stringify({'mobile': mobile, 'ticketId': ticketID, 'title': title}),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function(data) {
+                        if (data.status == 1) {
+                            alert('操作成功： ' + data.message);
+                            location.href = '/mobile/invoice/list';
+                        } else {
+                            alert('操作失败：' + data.message);
+                        }
+                    },
+                    error: function() {
+                        alert('操作失败！');
+                    }
+                })
+            });
+        });
+    </script>
+</body>
+</html>

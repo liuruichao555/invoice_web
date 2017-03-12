@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>个人用户注册</title>
+    <!-- Author: Song -->
+    <script src="/js/bootstrapCssWrapper-bundle.js"></script>
+</head>
+<body>
+<div id="root">
+</div>
+<div id="example">
+</div>
+<script type="text/javascript">
+    var pageParas ={
+        formInit :[
+            {name:"name"} ,
+            {name:"mobile"} ,
+            {name:"pwd"},
+            {name:"address", alias:"地址"},
+            {name:"taxId", alias:"纳税人识别号"},
+            {name:"bankName", alias:"开户行"},
+            {name:"bankAccount", alias:"账户"}
+        ],
+        formExtend :[
+            {name:"name", alias:"公司名称"} ,
+            {name:"mobile", alias:"手机号"} ,
+            {name:"pwd", alias:"密码"}
+        ],
+        title : "企业用户申请",
+        url : "/rest/user/apply",
+        redirectUrl : "/",
+        method : "post"
+    }
+</script>
+<script src="/js/commonV3.js"></script>
+<script src="/js/editFormGenerator-bundle.js"></script>
+</body>
+</html>

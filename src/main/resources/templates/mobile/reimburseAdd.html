@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" id="viewport" />
+    <title>用户登录</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        body{
+            background: #dddddd;
+
+        }
+        nav{
+            width:100%;
+            height: 70px;
+            background: #1d1d1d;
+            margin-bottom:10%;
+        }
+        .invoiceProduce{
+            width:95%;
+            display: block;
+            margin: 20px auto;
+            /*height: 230px;*/
+            border-radius: 5px;
+            background: #ffffff;
+            font-size: 20px;
+            font-family: "Microsoft YaHei UI";
+            color: #ffffff;
+            font-weight: 300;
+            text-align: center;
+            line-height: 70px;
+            padding:5% 1%;
+        }
+        .invoiceProduce h6{
+            width:30%;
+            display: inline-block;
+            color: #5d5d5d;
+            text-align: left;
+            font-family: "Microsoft YaHei UI";
+            font-size: 14px;
+            font-weight: 200;
+        }
+        .invoiceProduce .input-text{
+            width:50%;
+            display: inline-block;
+            height: 35px;
+            border-radius: 5px;
+            border:none;
+            transition: 0.2s all ease-in;
+        }
+        .invoiceProduce em{
+            display: block;
+            width: 100%;
+            border-bottom: 1px solid #dddddd;
+        }
+        .invoiceProduce .input-text:focus{
+            box-shadow: 0 0 5px 0px #ec6912;
+        }
+        .btn{
+            display: block ;
+            width:95% ;
+            height: 50px ;
+            background: #ec6912;
+            border-radius: 5px;
+            border:none;
+            margin:0 auto;
+            margin-top: 5%;
+            line-height: 50px;
+            font-family: "Microsoft YaHei UI";
+            font-size: 18px;
+            font-weight:200;
+            color: #ffffff;
+            text-align: center;
+        }
+        .label-text{
+            color: rgba(94, 171, 181, 1);
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+<#include "/mobile/common.html"/>
+<div class="invoiceProduce">
+    <div>
+        <h6>单位名称</h6>
+        <input type="text" class="input-text" value="${buyerId}" disabled>
+        <em></em>
+    </div>
+    <div>
+        <h6>部门</h6>
+        <input type="text" class="input-text" id="department">
+        <em></em>
+    </div>
+    <div>
+        <h6>姓名</h6>
+        <input type="text" class="input-text" id="name">
+        <em></em>
+    </div>
+    <div>
+        <h6>说明</h6>
+        <input type="text" class="input-text" id="description">
+        <em></em>
+    </divaaaaaaaaaaaaaaaaaam                                                                ,,
+    <div>
+        <h6>发票列表</h6>
+        <label class="input-text label-text">${list}</label>
+        <em></em>
+    </div>
+    <input type="button" class="btn" value="确认" id="subBtn">
+</div>
+<script src="/js/zepto.min.js"></script>
+<script src="/js/touch.js"></script>
+<script>
+    $(function() {
+        var companyTitle = '${buyerId}';
+        var ticketList = '${list}';
+        $('#subBtn').tap(function() {
+            var department = $('#department').val();
+            var name = $('#name').val();
+            var description = $('#description').val();
+            if (department == '') {
+                alert('部门不能为空！');
+                return;
+            }
+            if (name == '') {
+                alert('姓名不能为空！');
+                return;
+            }
+            if (description == '') {
+                alert('说明不能为空！');
+                return;
+            }
+            // ticketList
+            var data = {"companyTitle":companyTitle,
+                "department":department,
+                "name":name,
+                "description":description,
+                "invoiceNumberList":ticketList.replace(/-/g, '\t')};
+            $.ajax({
+                url: '/rest/reimburse',
+                type: 'POST',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(data) {
+                    if (data.status == 1) {
+                        alert('操作成功： ' + data.message);
+                        location.href = '/mobile/invoice/list';
+                    } else {
+                        alert('操作失败：' + data.message);
+                    }
+                },
+                error: function() {
+                    alert('操作失败！');
+                }
+            })
+        });
+    });
+</script>
+</body>
+</html>
